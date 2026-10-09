@@ -4,6 +4,10 @@
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-06",
   "observability": { "enabled": true },
+  "routes": [
+    { "pattern": "theradora.com.au", "custom_domain": true },
+    { "pattern": "www.theradora.com.au", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./out",
     "binding": "ASSETS",
