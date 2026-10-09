@@ -47,19 +47,25 @@ export default function EnquiryForm({ kind }: Props) {
       </div>
 
       <label className="block">
-        Name
+        {kind === "contact" ? "Full name" : "Name"}
         <input className={field} name="name" required autoComplete="name" />
       </label>
+      {kind === "contact" && (
+        <label className="block">
+          Organisation (optional)
+          <input className={field} name="organisation" autoComplete="organization" />
+        </label>
+      )}
       <label className="block">
-        Email
+        Email address
         <input className={field} type="email" name="email" required autoComplete="email" />
       </label>
 
       {kind === "contact" ? (
         <>
           <label className="block">
-            Organisation (optional)
-            <input className={field} name="organisation" autoComplete="organization" />
+            Phone number (optional)
+            <input className={field} type="tel" name="phone" autoComplete="tel" />
           </label>
           <label className="block">
             Enquiry type
@@ -67,10 +73,10 @@ export default function EnquiryForm({ kind }: Props) {
               <option value="" disabled>
                 Select one
               </option>
-              <option>Referral</option>
-              <option>Partnership</option>
-              <option>Supplier</option>
-              <option>Careers</option>
+              <option>General enquiry</option>
+              <option>Referral or healthcare services</option>
+              <option>Partnership or collaboration</option>
+              <option>Careers and professional opportunities</option>
               <option>Other</option>
             </select>
           </label>
@@ -123,8 +129,8 @@ export default function EnquiryForm({ kind }: Props) {
 
       {kind === "contact" && (
         <p className="text-sm text-muted">
-          Please don&rsquo;t include patient details here. Email isn&rsquo;t a secure channel, and urgent referrals must
-          be made by phone.
+          Please avoid including sensitive personal or medical information in this general contact form. For a client
+          referral, please contact the relevant healthcare business through its designated referral process.
         </p>
       )}
       {kind === "careers" && (
