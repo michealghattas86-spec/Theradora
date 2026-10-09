@@ -28,6 +28,15 @@ The Worker (`worker/index.ts`) serves the static export in `./out` and handles `
 
 To test locally, including the form endpoint: `npm run preview` (builds, then runs `wrangler dev`; put secrets in a local `.dev.vars` file, which is gitignored).
 
+### If the form shows "something went wrong"
+
+The Worker now logs the reason. Open Cloudflare dashboard > Workers & Pages > theradora > Logs, submit the form, and look for a line starting `enquiry:`:
+
+- `RESEND_API_KEY is not set` - add the secret under Settings > Variables and Secrets, then redeploy.
+- `Resend rejected the email (HTTP 403)` - theradora.com.au is not yet a verified sending domain in Resend (add its DNS records), or `MAIL_FROM` uses a different domain.
+- `Resend rejected the email (HTTP 401)` - the API key is wrong or revoked.
+- `could not reach Resend` - transient network error; retry.
+
 ## Before launch
 
 Anything still unconfirmed is highlighted yellow on the page and counted by:

@@ -50,7 +50,8 @@ const handleEnquiry = async (request: Request, env: Env) => {
     return json({ ok: false, error: "Missing or invalid fields" }, 400);
   }
   if (!env.RESEND_API_KEY) {
-    return json({ ok: false, error: "Email is not configured" }, 500);
+    console.error("enquiry: RESEND_API_KEY is not set on the Worker");
+    return json({ ok: false, error: "not_configured" }, 500);
   }
 
   const type = clean(data.type, 50) || "Other";
@@ -67,26 +68,35 @@ const handleEnquiry = async (request: Request, env: Env) => {
 
   const html = `<table cellpadding="6">${rows}</table><p style="white-space:pre-wrap">${esc(message)}</p>`;
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: env.MAIL_FROM || "Theradora Website <no-reply@theradora.com.au>",
-      to: [
-        form === "careers"
-          ? env.CAREERS_TO || "business@theradora.com.au"
-          : env.CONTACT_TO || "business@theradora.com.au",
-      ],
-      reply_to: email,
-      subject,
-      html,
-    }),
-  });
+  const from = env.MAIL_FROM || "Theradora Website <no-reply@theradora.com.au>";
+  const to = form === "careers"
+    ? env.CAREERS_TO || "business@theradora.com.au"
+    : env.CONTACT_TO || "business@theradora.com.au";
 
-  return res.ok ? json({ ok: true }) : json({ ok: false }, 502);
+  let res: Response;
+  try {
+    res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ from, to: [to], reply_to: email, subject, html }),
+    });
+  } catch (err) {
+    console.error("enquiry: could not reach Resend", String(err));
+    return json({ ok: false, error: "send_failed" }, 502);
+  }
+
+  if (!res.ok) {
+    // Resend explains why (unverified domain, bad key, invalid recipient). Log it for
+    // Cloudflare Workers Logs; never return it to the visitor.
+    const detail = (await res.text().catch(() => "")).slice(0, 500);
+    console.error(`enquiry: Resend rejected the email (HTTP ${res.status}) from="${from}" to="${to}" ${detail}`);
+    return json({ ok: false, error: "send_failed" }, 502);
+  }
+
+  return json({ ok: true });
 };
 
 export default {
@@ -96,7 +106,12 @@ export default {
       if (request.method !== "POST") {
         return new Response("Method not allowed", { status: 405, headers: { Allow: "POST" } });
       }
-      return handleEnquiry(request, env);
+      try {
+        return await handleEnquiry(request, env);
+      } catch (err) {
+        console.error("enquiry: unexpected error", String(err));
+        return json({ ok: false, error: "server_error" }, 500);
+      }
     }
     return env.ASSETS.fetch(request);
   },
