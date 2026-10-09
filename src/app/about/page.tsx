@@ -1,94 +1,75 @@
 import PageShell from "@/components/PageShell";
-import Todo from "@/components/Todo";
-import { pageMeta, SITE } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 
 export const metadata = pageMeta(
-  "About Theradora | Healthcare Businesses in Tasmania and SA",
-  "Learn about Theradora Pty Ltd, our people-first approach, our clinical governance and the leaders behind Physio To Home and AlphaCare Physiotherapy.",
+  "About Theradora | A Family Healthcare Business",
+  "Theradora is an Australian family business built on the belief that healthcare should be personal, accessible and centred on people.",
   "/about/"
 );
 
 export default function About() {
   return (
-    <PageShell title="About Theradora">
-      <h2>Who we are</h2>
+    <PageShell title="About Theradora" lead="A family business, growing to serve Australia">
       <p>
-        Theradora Pty Ltd operates two businesses: Physio To Home, a mobile service across Tasmania, and AlphaCare
-        Physiotherapy, a clinic in south Adelaide. We are an Australian healthcare company that develops and supports
-        physiotherapy and allied health businesses across different care environments.
+        Theradora is an Australian family business built on a simple belief: healthcare should be personal, accessible
+        and centred on people.
+      </p>
+      <p>
+        What began with a passion for helping people live healthier, more independent lives is growing into a broader
+        commitment to delivering quality healthcare services to communities across Australia. As we grow, we remain
+        guided by the values that started it all: compassion, integrity, respect and genuine care for every person we
+        serve.
       </p>
 
-      <h2>Why we exist</h2>
+      <h2>Growing with purpose</h2>
       <p>
-        We believe good care should be easy to reach. Many people struggle to access physiotherapy because of mobility,
-        distance, cost or complexity. Our aim is to create services that are clinically responsible, easy to access and
-        genuinely useful to the people who rely on them.
+        We believe that meaningful healthcare starts with understanding people, their needs and the communities they
+        call home.
+      </p>
+      <p>
+        Through our growing network of healthcare businesses, we aim to make professional care more accessible, build
+        lasting relationships with clients and their families, and support the healthcare professionals who make a
+        difference every day.
+      </p>
+      <p>
+        Our growth is intentional. We focus on building strong teams, developing trusted partnerships and creating
+        services that respond to the changing needs of Australian communities.
       </p>
 
-      <h2>Our approach</h2>
+      <h2>Our family values</h2>
       <p>
-        Rather than making every service look the same, we support each brand to respond to its local community while
-        maintaining high professional standards.
+        Being a family business shapes the way we work. We value personal relationships, accountability and treating
+        people with the same care and respect we would want for our own family.
       </p>
       <p>
-        <strong>People first.</strong> We design services around real people, their goals, circumstances and everyday
-        lives. Our clinicians see people in their own homes, so care fits around their routines.
-      </p>
-      <p>
-        <strong>Professional care.</strong> We value evidence-informed practice, appropriate clinical judgement and clear
-        communication. <Todo>Add one concrete example, such as how clinical work is supported or reviewed.</Todo>
-      </p>
-      <p>
-        <strong>Accessible by design.</strong> We look for practical ways to make quality physiotherapy easier to access
-        across clinic and community settings, including home visits across Tasmania and a range of funding streams.
+        These principles guide how we support our clients, work with our partners and build our team. As Theradora
+        expands, we are committed to preserving that personal approach, ensuring that growth never comes at the expense
+        of quality or compassion.
       </p>
 
-      <h2>Clinical governance</h2>
+      <h2>Supporting communities across Australia</h2>
       <p>
-        Theradora is committed to safe, high-quality, evidence-informed care. Across Physio To Home and AlphaCare
-        Physiotherapy:
+        Through our healthcare businesses, including Physio To Home and AlphaCare Physiotherapy, we are building a
+        foundation for continued growth across Australia.
       </p>
-      <ul>
-        <li>
-          <strong>Registration.</strong> All registered health practitioners hold current registration with the relevant
-          national board or professional body, such as AHPRA, and practise within their scope.
-        </li>
-        <li>
-          <strong>Insurance.</strong> Our practitioners hold appropriate professional indemnity insurance.{" "}
-          <Todo>Add public liability if applicable.</Todo>
-        </li>
-        <li>
-          <strong>Clinical standards.</strong> We practise in line with current evidence and the standards of each
-          profession.
-        </li>
-        <li>
-          <strong>Privacy and records.</strong> We handle personal and health information in accordance with the Privacy
-          Act 1988 and the Australian Privacy Principles, and keep clinical records securely.
-        </li>
-        <li>
-          <strong>Safety and risk.</strong> We maintain risk management processes, including infection prevention and
-          control, and emergency planning.
-        </li>
-        <li>
-          <strong>Feedback and complaints.</strong> We welcome feedback and take complaints seriously. Contact us at{" "}
-          <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or <a href={SITE.phoneHref}>{SITE.phone}</a>, and we&rsquo;ll
-          respond <Todo>within X business days</Todo>. Patients can also contact the relevant health complaints body in
-          their state. <Todo>Tasmania: Health Complaints Commissioner. South Australia: Health and Community Services Complaints Commissioner. Verify current names and links.</Todo>
-        </li>
-      </ul>
+      <p>
+        Each business has its own identity and focus, united by a shared commitment to professional care, positive
+        outcomes and meaningful connections with the people and communities we serve.
+      </p>
+      <p>
+        We look forward to working alongside clients, families, healthcare professionals and community partners as we
+        continue to grow.
+      </p>
 
-      <h2>Leadership</h2>
-      <h3>Micheal Ghattas</h3>
+      <h2>Looking ahead</h2>
       <p>
-        <strong>Director, Physio To Home | Principal Physiotherapist</strong>
+        Our vision is to build a trusted Australian healthcare group that grows responsibly, creates opportunities for
+        healthcare professionals and makes a meaningful difference in people&rsquo;s lives.
       </p>
       <p>
-        Micheal leads Physio To Home, delivering physiotherapy to people across Tasmania in their homes and
-        communities. His clinical interests include musculoskeletal care, post-surgical rehabilitation, falls prevention,
-        neurological physiotherapy, chronic pain, and the assessment and treatment of cervicogenic dizziness.{" "}
-        <Todo>Add qualifications, years of experience, and one line on what he cares about in care.</Todo>
+        We may be growing in size and reach, but our purpose remains the same: to put people first, build lasting
+        relationships and deliver care that matters.
       </p>
-      <p>AHPRA registration: PHY0002634794</p>
     </PageShell>
   );
 }
