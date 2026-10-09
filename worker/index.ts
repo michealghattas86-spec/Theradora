@@ -1,20 +1,19 @@
-// Cloudflare Pages Function: POST /api/enquiry
+// Cloudflare Worker: serves the static site (./out) and handles POST /api/enquiry.
 // Sends the contact and careers forms to the right inbox using Resend.
 //
-// Environment variables (Cloudflare Pages > Settings > Variables and Secrets):
+// Environment variables (Cloudflare dashboard > Workers & Pages > theradora > Settings > Variables and Secrets):
 //   RESEND_API_KEY   (secret) API key from resend.com, with theradora.com.au verified as a sending domain
 //   CONTACT_TO       inbox for contact enquiries   (default: business@theradora.com.au)
 //   CAREERS_TO       monitored recruitment inbox   (default: business@theradora.com.au)
 //   MAIL_FROM        sender address                (default: Theradora Website <no-reply@theradora.com.au>)
 
 interface Env {
+  ASSETS: { fetch(request: Request): Promise<Response> };
   RESEND_API_KEY?: string;
   CONTACT_TO?: string;
   CAREERS_TO?: string;
   MAIL_FROM?: string;
 }
-
-type Ctx = { request: Request; env: Env };
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -31,7 +30,7 @@ const clean = (v: unknown, max = 5000) =>
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-export const onRequestPost = async ({ request, env }: Ctx) => {
+const handleEnquiry = async (request: Request, env: Env) => {
   let data: Record<string, unknown>;
   try {
     data = await request.json();
@@ -88,4 +87,17 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
   });
 
   return res.ok ? json({ ok: true }) : json({ ok: false }, 502);
+};
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const { pathname } = new URL(request.url);
+    if (pathname === "/api/enquiry") {
+      if (request.method !== "POST") {
+        return new Response("Method not allowed", { status: 405, headers: { Allow: "POST" } });
+      }
+      return handleEnquiry(request, env);
+    }
+    return env.ASSETS.fetch(request);
+  },
 };

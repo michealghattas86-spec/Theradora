@@ -1,32 +1,32 @@
 # Theradora website
 
-Corporate website for Theradora Pty Ltd (theradora.com.au). Next.js (static export) + Tailwind CSS, hosted on Cloudflare Pages. Form submissions go through a Cloudflare Pages Function.
+Corporate website for Theradora Pty Ltd (theradora.com.au). Next.js (static export) + Tailwind CSS, hosted on Cloudflare Workers (static assets). Form submissions go through the Worker in `worker/index.ts`.
 
 ## Develop
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000 (forms need the Pages Function, see below)
+npm run dev        # http://localhost:3000 (forms need the Worker, see below)
 npm run build      # static site in ./out
 ```
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare Workers
 
-1. Push this repo to GitHub.
-2. Cloudflare dashboard > Workers & Pages > Create > Pages > Connect to Git, and pick the repo.
-3. Build settings:
-   - Framework preset: None (or Next.js, static export)
+The Worker (`worker/index.ts`) serves the static export in `./out` and handles `POST /api/enquiry`. Config is in `wrangler.jsonc`.
+
+1. Push this repo to GitHub and connect it in Cloudflare dashboard > Workers & Pages > Create > Import a repository.
+2. Build settings:
    - Build command: `npm run build`
-   - Build output directory: `out`
+   - Deploy command: `npx wrangler deploy`
    - Environment variable: `NODE_VERSION` = `22`
-4. Add the form variables under Settings > Variables and Secrets (production):
+3. Add the form variables under the Worker's Settings > Variables and Secrets:
    - `RESEND_API_KEY` (secret). Create a free account at resend.com and verify theradora.com.au as a sending domain.
    - `CONTACT_TO`, `CAREERS_TO` (optional, both default to business@theradora.com.au). Set `CAREERS_TO` to a monitored recruitment inbox.
    - `MAIL_FROM` (optional, default `Theradora Website <no-reply@theradora.com.au>`)
-5. Custom domain: Pages project > Custom domains > add `theradora.com.au` and `www.theradora.com.au`. If the domain's DNS is on Cloudflare this is automatic; otherwise move the nameservers to Cloudflare or add the CNAME it shows you.
-6. Redirect `www` to the apex (Rules > Redirect Rules) so there is one canonical address.
+4. Custom domain: Worker > Settings > Domains & Routes > add `theradora.com.au` and `www.theradora.com.au`. If the domain's DNS is on Cloudflare this is automatic.
+5. Redirect `www` to the apex (Rules > Redirect Rules) so there is one canonical address.
 
-`functions/api/enquiry.ts` is picked up automatically by Cloudflare Pages when deployed from Git. It does not run under `next dev`; to test it locally use `npm run build && npx wrangler pages dev out`.
+To test locally, including the form endpoint: `npm run preview` (builds, then runs `wrangler dev`; put secrets in a local `.dev.vars` file, which is gitignored).
 
 ## Before launch
 

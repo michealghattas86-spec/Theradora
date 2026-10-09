@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve out",
-    "check:todos": "node scripts/check-todos.mjs"
+    "check:todos": "node scripts/check-todos.mjs",
+    "deploy": "npm run build && wrangler deploy",
+    "preview": "npm run build && wrangler dev"
   },
   "dependencies": {
     "next": "^15.5.0",
@@ -19,6 +21,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "tailwindcss": "^4.1.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "wrangler": "^4.149.0"
   }
 }
